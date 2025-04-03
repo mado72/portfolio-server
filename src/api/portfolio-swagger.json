@@ -1,0 +1,194 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Portfolio API",
+    "description": "API for getting asset quotes.",
+    "version": "0.0.1-SNAPSHOT"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "host": "localhost:8080",
+  "basePath": "/api/v1",
+  "paths": {
+    "/yahoo/price/{ticker}": {
+      "get": {
+        "x-swagger-router-controller": "YahooApi",
+        "operationId": "getYahooPriceTicker",
+        "tags": [
+          "/yahoo"
+        ],
+        "description": "Returns the current asset for the requested location using the requested unit.",
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "path",
+            "description": "The asset ticker recognized by the Yahoo Finance",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request.",
+            "schema": {
+              "$ref": "#/definitions/YahooResponse"
+            }
+          },
+          "default": {
+            "description": "Invalid request.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/yahoo/price": {
+      "get": {
+        "x-swagger-router-controller": "YahooApi",
+        "operationId": "getYahooPriceTickerArray",
+        "tags": [
+          "/yahoo"
+        ],
+        "description": "Returns the current asset for the requested location using the requested unit.",
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "query",
+            "description": "The asset ticker recognized by the Yahoo Finance",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request.",
+            "schema": {
+              "$ref": "#/definitions/YahooResponse"
+            }
+          },
+          "default": {
+            "description": "Invalid request.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "YahooResponse": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "language": {
+          "type": "string",
+          "example": "en-US"
+        },
+        "region": {
+          "type": "string",
+          "example": "US"
+        },
+        "quoteType": {
+          "type": "string",
+          "enum": [
+            "EQUITY",
+            "ETF",
+            "MUTUALFUND"
+          ]
+        },
+        "typeDisp": {
+          "type": "string"
+        },
+        "quoteSourceName": {
+          "type": "string"
+        },
+        "triggerable": {
+          "type": "boolean"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "customPriceAlertConfidence": {
+          "type": "string",
+          "enum": [
+            "HIGH",
+            "LOW"
+          ]
+        },
+        "marketState": {
+          "type": "string",
+          "enum": [
+            "REGULAR",
+            "CLOSED",
+            "PRE",
+            "PREPRE",
+            "POST",
+            "POSTPOST"
+          ]
+        },
+        "tradeable": {
+          "type": "boolean"
+        },
+        "regularMarketDayRange": {
+          "$ref": "#/definitions/TwoNumberRange"
+        }
+      },
+      "required": [
+        "language",
+        "region",
+        "quoteType",
+        "triggerable",
+        "marketState",
+        "tradeable"
+      ]
+    },
+    "TwoNumberRange": {
+      "type": "object",
+      "properties": {
+        "low": {
+          "type": "number"
+        },
+        "high": {
+          "type": "number"
+        }
+      }
+    },
+    "Error": {
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ]
+    }
+  },
+  "x-express-middleware": {
+    "cors": {
+      "config": {
+        "origin": "http://localhost:4200",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE",
+          "OPTIONS"
+        ],
+        "allowedHeaders": [
+          "Origin",
+          "X-Requested-With",
+          "Content-Type",
+          "Authorization",
+          "Accept"
+        ]
+      }
+    }
+  }
+}

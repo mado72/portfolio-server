@@ -1,0 +1,68 @@
+swagger: "2.0"
+host: "localhost"
+basePath: "/api/v1"
+info:
+  title: Portfolio API
+  version: 0.0.1-SNAPSHOT
+paths:
+  /yahoo/price/{ticker}:
+    get:
+      tags:
+      - yahoo-api
+      summary: Get price for a asset ticker
+      description: It gets from yahoo finance the actual price of a ticker defined
+        at path variable
+      operationId: getYahooPriceTicker
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        type: string
+      responses:
+        "200":
+          description: successful operation
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: YahooApi
+      
+definitions:
+  AnyValue: {}
+  YahooQuoteResponse:
+    type: object
+    properties:
+      language:
+        type: string
+      region:
+        type: string
+    example:
+      language: language
+      region: region
+  Error:
+    required:
+    - code
+    - message
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+        
+x-express-middleware:
+- name: cors
+  config:
+    origin: http://localhost:4200
+    methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+    allowedHeaders:
+    - Content-Type
+    - Authorization
+    - Origin
+    - X-Requested-With
+    - Accept
