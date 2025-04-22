@@ -27,6 +27,36 @@ paths:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: YahooApi
       
+  /yahoo/historical/{ticker}/{startDate}/{endDate}:
+    get:
+      tags:
+      - yahoo-api
+      summary: Get historical data for a asset ticker
+      description: Fetch monthly historical data for a set of assets.
+      operationId: getMonthlyHistoricalData
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        type: string
+      - name: startDate
+        in: path
+        required: true
+        type: string
+      - name: endDate
+        in: path
+        required: true
+        type: string
+      responses:
+        "200":
+          description: successful operation
+        default:
+          description: Unexpected error
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: YahooApi
+      
+      
 definitions:
   AnyValue: {}
   YahooQuoteResponse:

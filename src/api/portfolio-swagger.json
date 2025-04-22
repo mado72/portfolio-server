@@ -11,52 +11,18 @@
   "host": "localhost:8080",
   "basePath": "/api/v1",
   "paths": {
-    "/yahoo/price/{ticker}": {
-      "get": {
-        "x-swagger-router-controller": "YahooApi",
-        "operationId": "getYahooPriceTicker",
-        "tags": [
-          "/yahoo"
-        ],
-        "description": "Returns the current asset for the requested location using the requested unit.",
-        "parameters": [
-          {
-            "name": "ticker",
-            "in": "path",
-            "description": "The asset ticker recognized by the Yahoo Finance",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request.",
-            "schema": {
-              "$ref": "#/definitions/YahooResponse"
-            }
-          },
-          "default": {
-            "description": "Invalid request.",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/yahoo/price": {
       "get": {
-        "x-swagger-router-controller": "YahooApi",
-        "operationId": "getYahooPriceTickerArray",
         "tags": [
-          "/yahoo"
+          "yahoo-api"
         ],
-        "description": "Returns the current asset for the requested location using the requested unit.",
+        "summary": "Get price for a asset ticker",
+        "description": "It gets from yahoo finance the actual price of a ticker defined at path variable",
+        "operationId": "getYahooPriceTicker",
         "parameters": [
           {
             "name": "ticker",
             "in": "query",
-            "description": "The asset ticker recognized by the Yahoo Finance",
             "required": true,
             "type": "array",
             "items": {
@@ -66,112 +32,84 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful request.",
-            "schema": {
-              "$ref": "#/definitions/YahooResponse"
-            }
+            "description": "successful operation"
           },
           "default": {
-            "description": "Invalid request.",
+            "description": "Unexpected error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
           }
-        }
+        },
+        "x-swagger-router-controller": "YahooApi"
+      }
+    },
+    "/yahoo/historical/{startDate}/{endDate}": {
+      "get": {
+        "tags": [
+          "yahoo-api"
+        ],
+        "summary": "Get historical data for a asset ticker",
+        "description": "Fetch monthly historical data for a set of assets.",
+        "operationId": "getMonthlyHistoricalData",
+        "parameters": [
+          {
+            "name": "ticker",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "endDate",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-swagger-router-controller": "YahooApi"
       }
     }
   },
   "definitions": {
-    "YahooResponse": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "language": {
-          "type": "string",
-          "example": "en-US"
-        },
-        "region": {
-          "type": "string",
-          "example": "US"
-        },
-        "quoteType": {
-          "type": "string",
-          "enum": [
-            "EQUITY",
-            "ETF",
-            "MUTUALFUND"
-          ]
-        },
-        "typeDisp": {
-          "type": "string"
-        },
-        "quoteSourceName": {
-          "type": "string"
-        },
-        "triggerable": {
-          "type": "boolean"
-        },
-        "currency": {
-          "type": "string"
-        },
-        "customPriceAlertConfidence": {
-          "type": "string",
-          "enum": [
-            "HIGH",
-            "LOW"
-          ]
-        },
-        "marketState": {
-          "type": "string",
-          "enum": [
-            "REGULAR",
-            "CLOSED",
-            "PRE",
-            "PREPRE",
-            "POST",
-            "POSTPOST"
-          ]
-        },
-        "tradeable": {
-          "type": "boolean"
-        },
-        "regularMarketDayRange": {
-          "$ref": "#/definitions/TwoNumberRange"
-        }
-      },
-      "required": [
-        "language",
-        "region",
-        "quoteType",
-        "triggerable",
-        "marketState",
-        "tradeable"
-      ]
-    },
-    "TwoNumberRange": {
-      "type": "object",
-      "properties": {
-        "low": {
-          "type": "number"
-        },
-        "high": {
-          "type": "number"
-        }
-      }
-    },
     "Error": {
+      "required": [
+        "code",
+        "message"
+      ],
+      "type": "object",
       "properties": {
+        "code": {
+          "type": "string"
+        },
         "message": {
           "type": "string"
         }
-      },
-      "required": [
-        "message"
-      ]
+      }
     }
   },
-  "x-express-middleware": {
-    "cors": {
+  "x-express-middleware": [
+    {
+      "name": "cors",
       "config": {
         "origin": "http://localhost:4200",
         "methods": [
@@ -182,13 +120,13 @@
           "OPTIONS"
         ],
         "allowedHeaders": [
-          "Origin",
-          "X-Requested-With",
           "Content-Type",
           "Authorization",
+          "Origin",
+          "X-Requested-With",
           "Accept"
         ]
       }
     }
-  }
+  ]
 }
