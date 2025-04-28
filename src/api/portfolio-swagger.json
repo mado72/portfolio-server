@@ -5,17 +5,33 @@
     "description": "API for getting asset quotes.",
     "version": "0.0.1-SNAPSHOT"
   },
-  "produces": [
-    "application/json"
-  ],
+  "produces": ["application/json"],
   "host": "localhost:8080",
   "basePath": "/api/v1",
   "paths": {
+    "/health": {
+      "get": {
+        "tags": ["health-api"],
+        "summary": "Get Health Check",
+        "description": "Health check for the API",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-swagger-router-controller": "HealthApi"
+      }
+    },
     "/yahoo/price": {
       "get": {
-        "tags": [
-          "yahoo-api"
-        ],
+        "tags": ["yahoo-api"],
         "summary": "Get price for a asset ticker",
         "description": "It gets from yahoo finance the actual price of a ticker defined at path variable",
         "operationId": "getYahooPriceTicker",
@@ -46,9 +62,7 @@
     },
     "/yahoo/historical/{startDate}/{endDate}": {
       "get": {
-        "tags": [
-          "yahoo-api"
-        ],
+        "tags": ["yahoo-api"],
         "summary": "Get historical data for a asset ticker",
         "description": "Fetch monthly historical data for a set of assets.",
         "operationId": "getMonthlyHistoricalData",
@@ -88,14 +102,62 @@
         },
         "x-swagger-router-controller": "YahooApi"
       }
+    },
+    "/bonds/all": {
+      "get": {
+        "tags": ["bonds-api"],
+        "summary": "Get all bonds",
+        "description": "Get all bonds",
+        "operationId": "getAllBonds",
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-swagger-router-controller": "ThreasureApi"
+      }
+    },
+    "/bonds/filter": {
+      "get": {
+        "tags": ["bonds-api"],
+        "summary": "Get filtered bonds",
+        "description": "Get filtered bonds.",
+        "operationId": "getBondsById",
+        "parameters": [
+          {
+            "name": "bonds",
+            "in": "query",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "x-swagger-router-controller": "ThreasureApi"
+      }
     }
   },
   "definitions": {
     "Error": {
-      "required": [
-        "code",
-        "message"
-      ],
+      "required": ["code", "message"],
       "type": "object",
       "properties": {
         "code": {
@@ -112,13 +174,7 @@
       "name": "cors",
       "config": {
         "origin": "http://localhost:4200",
-        "methods": [
-          "GET",
-          "POST",
-          "PUT",
-          "DELETE",
-          "OPTIONS"
-        ],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allowedHeaders": [
           "Content-Type",
           "Authorization",

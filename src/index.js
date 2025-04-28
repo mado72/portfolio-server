@@ -6,6 +6,7 @@ const cors = require('cors');
 const express = require('express');
 const swaggerTools = require('swagger-tools');
 const swaggerDocument = require('./api/portfolio-swagger.json');
+require('dotenv').config();
 
 const serverPort = 8080;
 
