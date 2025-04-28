@@ -1,7 +1,7 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var ThreasureApi = require('../service/ThreaduryService.js');
+var ThreasureApi = require('../service/ThreasuryService.js');
 
 module.exports.getAllBonds = function (req, res, next) {
   ThreasureApi.getAllBonds()
