@@ -154,12 +154,12 @@
         "x-swagger-router-controller": "ThreasureApi"
       }
     },
-    "/crypto/filter": {
+    "/crypto/quotes": {
       "get": {
         "tags": ["crypto-api"],
-        "summary": "Get filtered cryptocurrencies",
-        "description": "Get filtered cryptocurrencies.",
-        "operationId": "getCryptosById",
+        "summary": "Get quotes for cryptocurrencies",
+        "description": "Get quotes for cryptocurrencies.",
+        "operationId": "getCryptoQuotesById",
         "parameters": [
           {
             "name": "cryptos",

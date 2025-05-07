@@ -2,7 +2,7 @@
 
 const axios = require('axios');
 
-exports.getCryptosById = async function(cryptos) {
+exports.getCryptoQuotesById = async function(cryptos) {
   try {
     
     if (!cryptos || !Array.isArray(cryptos)) {
