@@ -15,7 +15,10 @@ exports.getCryptoQuotesById = async function(cryptos) {
     for (const cryptoId of cryptos) {
       const response = await axios.get(`${apiUrl}${cryptoId}/ticker`);
       if (response.status === 200) {
-        result[cryptoId] = response.data;
+        result[cryptoId] = {
+          ...response.data.ticker,
+          currency: response.data.ticker.pair.replace(cryptoId, '')
+        };
       } else {
         throw new Error(`Failed to fetch data for crypto ID: ${cryptoId}`);
       }
@@ -23,8 +26,8 @@ exports.getCryptoQuotesById = async function(cryptos) {
     
     return result;
   } catch (error) {
-    console.error(`Error fetching bond by ID ${cryptos}:`, error);
-    throw new Error(`Failed to fetch bond by ID: ${error.message}`);
+    console.error(`Error fetching crypto by ID ${cryptos}:`, error);
+    throw new Error(`Failed to fetch crypto by ID: ${error.message}`);
   }
 }
 
