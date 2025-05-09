@@ -8,7 +8,9 @@ const swaggerTools = require('swagger-tools');
 const swaggerDocument = require('./api/portfolio-swagger.json');
 require('dotenv').config();
 
-const serverPort = 8080;
+const port = process.env.PORT || 3000;
+const host = process.env.HOST || '0.0.0.0';
+
 
 // const swaggerDocument = (() => {
 //     const fs = require('fs');
@@ -59,9 +61,9 @@ swaggerTools.initializeMiddleware(swaggerDocument, (middleware) => {
     app.use(middleware.swaggerUi());
 
     // Start the server
-    http.createServer(app).listen(serverPort, function () {
-        console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-        console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+    http.createServer(app).listen(port, function () {
+        console.log('Your server is listening on http://%s:%d', host, port);
+        console.log('Swagger-ui is available on http://%s:%d/docs', host, port);
     });
 });
 
