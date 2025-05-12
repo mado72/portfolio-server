@@ -6,7 +6,7 @@
     "version": "0.0.1-SNAPSHOT"
   },
   "produces": ["application/json"],
-  "host": "localhost:8080",
+  "host": "localhost:3000",
   "basePath": "/api/v1",
   "paths": {
     "/health": {

@@ -6,29 +6,11 @@ const cors = require('cors');
 const express = require('express');
 const swaggerTools = require('swagger-tools');
 const swaggerDocument = require('./api/portfolio-swagger.json');
+const morgan = require('morgan'); // Importa o morgan
 require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || '0.0.0.0';
-
-
-// const swaggerDocument = (() => {
-//     const fs = require('fs');
-//     const yaml = require('yaml');
-
-//     const yamlConfig = path.join(__dirname, 'api/openapi.yaml');
-//     console.log(yamlConfig);
-
-
-//     var yamlSource;
-//     try {
-//         yamlSource = fs.readFileSync(yamlConfig, 'utf-8');
-//     } catch (error) {
-//         console.error('Error reading OpenAPI file:', error);
-//         process.exit(1);
-//     }
-//     return yaml.parse(yamlSource);
-// })();
 
 const options = {
     controllers: path.join(__dirname, './controllers'),
@@ -42,6 +24,9 @@ const options = {
 };
 
 const app = express();
+
+// Adiciona o middleware morgan para logar as requisições
+app.use(morgan('combined')); // Usa o formato 'combined' para logs detalhados
 
 app.use(cors());
 

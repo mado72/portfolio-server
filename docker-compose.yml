@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   portfolio-server:
-    image: portfolio-server:0.0.2-SNAPSHOT
+    image: portfolio-server:0.0.3-SNAPSHOT
     build:
       context: ./
     ports:
@@ -11,11 +11,11 @@ services:
       - portfolio-network
 
   portfolio-app:
-    image: portfolio-app:0.0.3-SNAPSHOT
+    image: portfolio-app:0.0.4-SNAPSHOT
     build:
       context: ../portfolio-app
     ports:
-      - "8080:80"
+      - "80:80"
     environment:
       - API_URL=http://portfolio-server:3000
     depends_on:
