@@ -6,11 +6,14 @@ const cors = require('cors');
 const express = require('express');
 const swaggerTools = require('swagger-tools');
 const swaggerDocument = require('./api/portfolio-swagger.json');
-const morgan = require('morgan'); // Importa o morgan
 require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || '0.0.0.0';
+const useMorgan = process.env.USE_MORGAN || 'true'; // Adiciona a variável de ambiente USE_MORGAN
+if (useMorgan !== 'true') {
+    console.log('Morgan logging is disabled');
+}
 
 const options = {
     controllers: path.join(__dirname, './controllers'),
@@ -25,8 +28,12 @@ const options = {
 
 const app = express();
 
-// Adiciona o middleware morgan para logar as requisições
-app.use(morgan('combined')); // Usa o formato 'combined' para logs detalhados
+if (useMorgan === 'true') {
+    const morgan = require('morgan'); // Importa o morgan
+
+    // Adiciona o middleware morgan para logar as requisições
+    app.use(morgan('combined')); // Usa o formato 'combined' para logs detalhados
+}
 
 app.use(cors());
 
